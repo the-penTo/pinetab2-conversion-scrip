@@ -1,4 +1,5 @@
 ### EN
+
 # Script for PineTab2 with Danctnix Arch Linux ARM
 
 ## Script Description
@@ -46,6 +47,7 @@ The script:
 - wifite
 
 ### PL
+
 # Skrypt dla PineTab2 z Danctnix Arch Linux ARM
 
 ## Opis skryptu
