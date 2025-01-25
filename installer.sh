@@ -96,6 +96,7 @@ fetch_keyring()
 }
 
 # verify the keyring signature
+# note: this is pointless if you do not verify the key fingerprint
 verify_keyring()
 {
   if ! gpg --keyserver keyserver.ubuntu.com --recv-keys 4345771566D76038C7FEB43863EC0ADBEA87E4E3 > /dev/null 2>&1; then
@@ -221,88 +222,6 @@ blackarch_setup()
   esac
 }
 
-##blackarch_setup
-#System update
-pacman_update()
-{
-  if pacman -Syy; then
-    return $SUCCESS
-  fi
-  warn "Synchronizing pacman has failed. Please try manually: pacman -Syy"
-  return $FAILURE
-}
-# simple error message wrapper
-error()
-{
-  echo >&2 "$(tput bold; tput setaf 1)[-] ERROR: ${*}$(tput sgr0)"
-  sudo -i 
-}
+bash ./strap.sh
 
-check_priv2()
-{
-  if [ "$(id -u)" -ne 0 ]; then 
-      warn 'you must be root!'
-      return $FAILURE
-    fi
-    else
-      return $SUCCESS
-    fi
-}
-
-# sudo
-sudo()
-{
-    if check_priv2 == $SUCCESS; then
-    else
-      sudo -i       
-    fi
-}    
-    return $FAILURE
-    msg 'Successfully switched to root user'
-    else
-      err 'you must be root'
-    fi
-  fi
-}
-#install metasploit-framework & armitage
-armitage_setup()
-{
-  step=$(load_status)
-  case $step in 
-    0)
-    msg 'Downloading armitage...'
-    check_internet
-    wget-O /tmp/armitage.tgz https://web.archive.org/web/20160610041827if_/http://www.fastandeasyhacking.com/download/armitage150813.tgz
-    msg 'un-taring armitage...'
-    tar -xvzf /tmp/armitage.tgz
-    msg 'Armitage un-tared successfully'
-    check_priv2
-    sudo mv armitage /opt/
-    msg 'Armitage moved to /opt/ successfully'
-    sudo ln -s /opt/armitage/armitage /usr/local/bin/armitage
-    sudo ln -s /opt/armitage/teamserver /usr/local/bin/teamserver
-    msg 'Armitage linked to /usr/local/bin/ successfully'
-    sh -c "echo java -jar /opt/armitage/armitage.jar \$\* > /usr/local/bin/armitage"
-    sudo perl -pi -e 's/armitage.jar/\/opt\/armitage\/armitage.jar/g' /opt/armitage/teamserver
-    sudo chown -R $USER:users /opt/armitage
-    msg 'Armitage installed successfully'
-    save_status 1
-    ;;
-    1)cd /opt/armitage/
-    msg 'Starting armitage service...'
-    ./msfrpcd -U msf -P test -f -S -a 127.0.0.1
-    msg 'Armitage service started successfully...'
-    save_status 2
-    ;;
-    2)msg 'Starting armitage...'
-    sh -c "armitage"    
-
-    msg 'Burp Suite downloaded successfully'
-    sudo chmod +x burpsuite_community_linux_arm64_v2021_11_2.sh
-    msg 'Installing burp suite...'
-    sudo ./burpsuite_community_linux_arm64_v2021_11_2.sh
-    msg 'Burp Suite installed successfully'
-    exit 0
-
-
-}   
+exit 0
