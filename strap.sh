@@ -224,3 +224,5 @@ blackarch_setup()
   pacman -S --noconfirm --needed blackarch-officials
   msg 'BlackArch Linux is ready!'
 }
+
+blackarch_setup
